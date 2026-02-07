@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Valentino 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e989a3 0%, #e778a769 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+            border: 5px solid #ff4d6d;
+            animation: pulse 3s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 25px rgba(255, 77, 109, 0.4); }
+            100% { box-shadow: 0 15px 35px rgba(255, 77, 109, 0.8); }
+        }
+        
+        h1 {
+            color: #ff4d6d;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            font-weight: 700;
+        }
+        
+        .heart-icon {
+            color: rgba(3, 212, 248, 0.537);
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            min-width: 160px;
+        }
+        
+        .btn-yes {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+        
+        .btn-yes:hover {
+            background-color: #ff3355;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.6);
+        }
+        
+        .btn-yes:active {
+            transform: translateY(0);
+        }
+        
+        .btn-no {
+            background-color: #6c757d;
+            color: white;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+        
+        .btn-no:hover {
+            background-color: #5a6268;
+            transform: translateY(-5px);
+        }
+        
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff4d6d;
+            top: -20px;
+            border-radius: 2px;
+        }
+        
+        .confetti:nth-child(odd) {
+            background-color: #ff9a9e;
+        }
+        
+        .confetti:nth-child(even) {
+            background-color: #ffd166;
+        }
+        
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            color: rgba(200, 8, 50, 0.483);
+            font-size: 24px;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .message {
+            margin-top: 30px;
+            font-size: 1.5rem;
+            color: #ff4d6d;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            min-height: 40px;
+        }
+        
+        .message.show {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 12px 30px;
+                font-size: 1.3rem;
+                min-width: 140px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .buttons {
+                gap: 15px;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 1.2rem;
+                min-width: 130px;
+            }
+            
+            .heart-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="container">
+        <div class="heart-icon">
+            <i class="fas fa-heart"></i>
+        </div>
+        <h1>Would you like to be my valentine?</h1>
+        
+        <div class="buttons">
+            <button class="btn btn-yes" id="yesBtn">YES <i class="fas fa-heart"></i></button>
+            <button class="btn btn-no" id="noBtn">NO <i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="message" id="message"></div>
+    </div>
+    
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const message = document.getElementById('message');
+            const confettiContainer = document.getElementById('confettiContainer');
+            const floatingHearts = document.getElementById('floatingHearts');
+            
+            // Creare cuori fluttuanti di sfondo
+            for (let i = 0; i < 25; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDelay = `${Math.random() * 15}s`;
+                heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+                floatingHearts.appendChild(heart);
+            }
+            
+            // Effetto per il pulsante YES
+            yesBtn.addEventListener('click', function() {
+                // Mostra il messaggio
+                message.textContent = "I love you so much!";
+                message.classList.add('show');
+                
+                // Crea effetto coriandoli
+                createConfetti();
+                
+                // Aggiungi animazione al pulsante YES
+                yesBtn.innerHTML = 'THANK YOU! <i class="fas fa-heart"></i>';
+                yesBtn.style.animation = 'none';
+                yesBtn.style.transform = 'scale(1.1)';
+                yesBtn.style.backgroundColor = '#ff3355';
+                
+                // Disabilita entrambi i pulsanti
+                yesBtn.disabled = true;
+                noBtn.disabled = true;
+                
+                // Aggiungi ulteriori cuori fluttuanti
+                for (let i = 0; i < 10; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('floating-heart');
+                    heart.innerHTML = '<i class="fas fa-heart"></i>';
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.animationDelay = '0s';
+                    heart.style.fontSize = `${Math.random() * 25 + 15}px`;
+                    heart.style.color = '#ff4d6d';
+                    floatingHearts.appendChild(heart);
+                }
+            });
+            
+            // Effetto per il pulsante NO
+            noBtn.addEventListener('mouseover', function() {
+                // Calcola una posizione casuale per il pulsante
+                const containerWidth = document.querySelector('.container').offsetWidth;
+                const containerHeight = document.querySelector('.container').offsetHeight;
+                const buttonWidth = noBtn.offsetWidth;
+                const buttonHeight = noBtn.offsetHeight;
+                
+                // Calcola coordinate casuali ma all'interno del container
+                const maxX = containerWidth - buttonWidth - 40; // 40px per padding
+                const maxY = containerHeight - buttonHeight - 100; // 100px per margini
+                
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                // Applica la trasformazione con transizione fluida
+                noBtn.style.transition = 'all 0.5s ease';
+                noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+                
+                // Cambia temporaneamente il testo
+                const originalText = noBtn.innerHTML;
+                noBtn.innerHTML = 'Are you sure? <i class="fas fa-question"></i>';
+                
+                // Ripristina il testo dopo un secondo
+                setTimeout(() => {
+                    noBtn.innerHTML = originalText;
+                }, 800);
+            });
+            
+            // Funzione per creare coriandoli
+            function createConfetti() {
+                const confettiCount = 100;
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    
+                    // Posizione iniziale casuale
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    
+                    // Dimensioni casuali
+                    const size = Math.random() * 10 + 5;
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    
+                    // Colori casuali
+                    const colors = ['#ff4d6d', '#ff9a9e', '#ffd166', '#06d6a0', '#118ab2'];
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // Aggiungi al container
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Animazione
+                    const animationDuration = Math.random() * 3 + 2;
+                    const horizontalMovement = Math.random() * 200 - 100;
+                    
+                    confetti.animate([
+                        { 
+                            transform: `translateY(0px) translateX(0px) rotate(0deg)`,
+                            opacity: 1
+                        },
+                        { 
+                            transform: `translateY(100vh) translateX(${horizontalMovement}px) rotate(${Math.random() * 360}deg)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: animationDuration * 1500,
+                        easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+                    });
+                    
+                    // Rimuovi dopo l'animazione
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, animationDuration * 1000);
+                }
+                
+                // Aggiungi altri coriandoli dopo un breve ritardo
+                setTimeout(() => {
+                    if (message.classList.contains('show')) {
+                        createConfetti();
+                    }
+                }, 300);
+            }
+            
+            // Aggiungi un effetto di clic per entrambi i pulsanti
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Effetto ripple
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = event.clientX - rect.left - size/2;
+                    const y = event.clientY - rect.top - size/2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.7);
+                        transform: scale(0);
+                        animation: ripple-animation 0.6s linear;
+                        width: ${size}px;
+                        height: ${size}px;
+                        top: ${y}px;
+                        left: ${x}px;
+                    `;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // Aggiungi stili per l'effetto ripple
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple-animation {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
