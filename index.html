@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>"For You <3"</title>
+    <title>"For You!"</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -297,8 +297,8 @@
                 }
             });
             
-            // Effetto per il pulsante NO
-            noBtn.addEventListener('mouseover', function() {
+            // MODIFICA: Unificato l'effetto per desktop e mobile
+            function moveNoButton() {
                 // Calcola una posizione casuale per il pulsante
                 const containerWidth = document.querySelector('.container').offsetWidth;
                 const containerHeight = document.querySelector('.container').offsetHeight;
@@ -324,11 +324,39 @@
                 setTimeout(() => {
                     noBtn.innerHTML = originalText;
                 }, 800);
-            });
+            }
+            
+            // MODIFICA: Gestione diversa per desktop e mobile
+            if (isMobile) {
+                // Su mobile: si sposta quando viene TOCCATO
+                noBtn.addEventListener('touchstart', function(e) {
+                    // Previene il comportamento predefinito
+                    if (e.cancelable) e.preventDefault();
+                    
+                    // Sposta il pulsante
+                    moveNoButton();
+                    
+                    // Previene il click successivo
+                    setTimeout(() => {
+                        if (e.cancelable) e.preventDefault();
+                    }, 100);
+                }, { passive: false });
+                
+                // Aggiungi anche click per compatibilità
+                noBtn.addEventListener('click', function(e) {
+                    if (e.cancelable) e.preventDefault();
+                    moveNoButton();
+                });
+            } else {
+                // Su desktop: si sposta quando il mouse passa sopra
+                noBtn.addEventListener('mouseover', function() {
+                    moveNoButton();
+                });
+            }
             
             // Funzione per creare coriandoli
             function createConfetti() {
-                const confettiCount = 40;
+                const confettiCount = 100;
                 
                 for (let i = 0; i < confettiCount; i++) {
                     const confetti = document.createElement('div');
