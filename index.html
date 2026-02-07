@@ -306,178 +306,107 @@
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             let isAnimating = false;
             
-            // RIDOTTO: Creare cuori fluttuanti di sfondo (solo 15 su mobile, 25 su desktop)
+            // Creare cuori fluttuanti di sfondo
             const heartCount = isMobile ? 15 : 25;
             for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('floating-heart');
                 heart.innerHTML = '<i class="fas fa-heart"></i>';
                 heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.animationDelay = `${Math.random() * 20}s`;
-                heart.style.fontSize = `${Math.random() * 15 + 10}px`;
+                heart.style.animationDelay = `${Math.random() * 15}s`;
+                heart.style.fontSize = `${Math.random() * 20 + 10}px`;
                 floatingHearts.appendChild(heart);
             }
             
-            // Effetto per il pulsante YES (ottimizzato per mobile e desktop)
-            yesBtn.addEventListener('click', function(event) {
-                if (isAnimating) return;
-                
-                // Previene il comportamento predefinito su mobile
-                if (event.cancelable) {
-                    event.preventDefault();
-                }
-                
-                handleYesClick();
-            });
-            
-            // Gestione del pulsante NO (ottimizzata)
-            noBtn.addEventListener('mouseover', function() {
-                if (!isMobile && !isAnimating) {
-                    moveNoButton();
-                }
-            });
-            
-            // Gestione touch per mobile sul pulsante NO
-            if (isMobile) {
-                let touchStartTime = 0;
-                let touchStartX = 0;
-                let touchStartY = 0;
-                
-                noBtn.addEventListener('touchstart', function(e) {
-                    touchStartTime = Date.now();
-                    touchStartX = e.touches[0].clientX;
-                    touchStartY = e.touches[0].clientY;
-                    
-                    // Previene lo scroll accidentale
-                    if (e.cancelable) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-                
-                noBtn.addEventListener('touchend', function(e) {
-                    const touchEndTime = Date.now();
-                    const touchDuration = touchEndTime - touchStartTime;
-                    
-                    // Previene tap accidentali troppo brevi o lunghi
-                    if (touchDuration > 100 && touchDuration < 500 && !isAnimating) {
-                        moveNoButton();
-                    }
-                    
-                    if (e.cancelable) {
-                        e.preventDefault();
-                    }
-                }, { passive: false });
-                
-                // Disabilita il context menu su mobile
-                noBtn.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                    return false;
-                });
-            }
-            
-            // Funzione per gestire il click su YES
-            function handleYesClick() {
-                isAnimating = true;
-                
+            // Effetto per il pulsante YES
+            yesBtn.addEventListener('click', function() {
                 // Mostra il messaggio
                 message.textContent = "I love you so much!";
                 message.classList.add('show');
                 
-                // RIDOTTO: Crea meno coriandoli (40 su mobile, 60 su desktop)
-                const confettiCount = isMobile ? 40 : 60;
-                createConfetti(confettiCount);
+                // Crea effetto coriandoli (RIDOTTO)
+                createConfetti();
                 
                 // Aggiungi animazione al pulsante YES
                 yesBtn.innerHTML = 'THANK YOU! <i class="fas fa-heart"></i>';
+                yesBtn.style.animation = 'none';
+                yesBtn.style.transform = 'scale(1.1)';
                 yesBtn.style.backgroundColor = '#ff3355';
                 
                 // Disabilita entrambi i pulsanti
                 yesBtn.disabled = true;
                 noBtn.disabled = true;
-                yesBtn.classList.add('no-touch');
-                noBtn.classList.add('no-touch');
+            });
+            
+            // MODIFICATO: Il pulsante NO si sposta ogni volta che viene CLICCATO
+            noBtn.addEventListener('click', function(event) {
+                if (isAnimating) return;
                 
-                // Aggiungi ulteriori cuori fluttuanti (ridotti)
-                const extraHearts = isMobile ? 5 : 8;
-                for (let i = 0; i < extraHearts; i++) {
-                    setTimeout(() => {
-                        const heart = document.createElement('div');
-                        heart.classList.add('floating-heart');
-                        heart.innerHTML = '<i class="fas fa-heart"></i>';
-                        heart.style.left = `${Math.random() * 100}vw`;
-                        heart.style.animationDelay = '0s';
-                        heart.style.fontSize = `${Math.random() * 20 + 10}px`;
-                        heart.style.color = '#ff4d6d';
-                        heart.style.opacity = '0.7';
-                        floatingHearts.appendChild(heart);
-                        
-                        // Rimuovi dopo l'animazione per performance
-                        setTimeout(() => {
-                            if (heart.parentNode) {
-                                heart.remove();
-                            }
-                        }, 20000);
-                    }, i * 200);
+                // Previene il comportamento predefinito
+                if (event.cancelable) {
+                    event.preventDefault();
                 }
                 
-                isAnimating = false;
+                // Sposta il pulsante NO
+                moveNoButton();
+            });
+            
+            // Manteniamo anche l'hover per desktop per migliore UX
+            if (!isMobile) {
+                noBtn.addEventListener('mouseover', function() {
+                    if (!isAnimating) {
+                        moveNoButton();
+                    }
+                });
             }
             
-            // Funzione per spostare il pulsante NO (ottimizzata)
+            // Funzione per spostare il pulsante NO
             function moveNoButton() {
                 if (isAnimating) return;
                 isAnimating = true;
                 
+                // Calcola una posizione casuale per il pulsante
                 const container = document.querySelector('.container');
                 const containerRect = container.getBoundingClientRect();
                 const buttonWidth = noBtn.offsetWidth;
                 const buttonHeight = noBtn.offsetHeight;
                 
-                // Calcola area sicura all'interno del container
+                // Calcola coordinate casuali ma all'interno del container
                 const padding = 20;
                 const maxX = containerRect.width - buttonWidth - padding * 2;
                 const maxY = containerRect.height - buttonHeight - padding * 2;
                 
-                // Se il container è troppo piccolo, usa l'intera pagina
+                // Se il container è troppo piccolo, limita il movimento
                 let randomX, randomY;
-                
                 if (maxX > 50 && maxY > 50) {
                     randomX = Math.random() * maxX;
                     randomY = Math.random() * maxY;
                 } else {
-                    // Fallback: sposta in posizione casuale nella viewport
-                    randomX = Math.random() * (window.innerWidth - buttonWidth - 40);
-                    randomY = Math.random() * (window.innerHeight - buttonHeight - 100);
+                    // Spostamento minimo ma visibile
+                    randomX = Math.random() * 100 - 50;
+                    randomY = Math.random() * 100 - 50;
                 }
                 
-                // CORREZIONE: Applica la trasformazione SENZA transizione su :active
-                noBtn.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                // Applica la trasformazione
+                noBtn.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                 noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
                 
                 // Cambia temporaneamente il testo
                 const originalText = noBtn.innerHTML;
-                noBtn.innerHTML = 'Are you sure? <i class="fas fa-question"></i>';
+                noBtn.innerHTML = 'Try again! <i class="fas fa-redo"></i>';
                 
-                // Ripristina il testo dopo un secondo
+                // Ripristina il testo dopo mezzo secondo
                 setTimeout(() => {
                     noBtn.innerHTML = originalText;
                     isAnimating = false;
-                }, 800);
+                }, 500);
             }
             
-            // Funzione per creare coriandoli (ottimizzata)
-            function createConfetti(count) {
-                // Pulisci coriandoli vecchi per performance
-                const oldConfetti = confettiContainer.querySelectorAll('.confetti');
-                if (oldConfetti.length > 50) {
-                    for (let i = 0; i < oldConfetti.length - 30; i++) {
-                        if (oldConfetti[i].parentNode) {
-                            oldConfetti[i].remove();
-                        }
-                    }
-                }
+            // Funzione per creare coriandoli (RIDOTTA)
+            function createConfetti() {
+                const confettiCount = isMobile ? 60 : 80; // RIDOTTO
                 
-                for (let i = 0; i < count; i++) {
+                for (let i = 0; i < confettiCount; i++) {
                     setTimeout(() => {
                         const confetti = document.createElement('div');
                         confetti.classList.add('confetti');
@@ -485,37 +414,34 @@
                         // Posizione iniziale casuale
                         confetti.style.left = `${Math.random() * 100}vw`;
                         
-                        // Dimensioni più piccole su mobile
-                        const size = isMobile ? Math.random() * 6 + 4 : Math.random() * 8 + 5;
+                        // Dimensioni casuali (ridotte)
+                        const size = Math.random() * 8 + 4;
                         confetti.style.width = `${size}px`;
                         confetti.style.height = `${size}px`;
                         
-                        // Colori casuali
+                        // Colori casuali (solo 3 colori per performance)
                         const colors = ['#ff4d6d', '#ff9a9e', '#ffd166'];
                         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                         
                         // Aggiungi al container
                         confettiContainer.appendChild(confetti);
                         
-                        // Animazione ottimizzata
-                        const animationDuration = Math.random() * 2 + 1.5; // Più breve su mobile
-                        const horizontalMovement = Math.random() * 100 - 50;
+                        // Animazione più breve per performance
+                        const animationDuration = Math.random() * 1.5 + 1;
+                        const horizontalMovement = Math.random() * 120 - 60;
                         
-                        // Usa requestAnimationFrame per performance
-                        requestAnimationFrame(() => {
-                            confetti.animate([
-                                { 
-                                    transform: `translateY(0px) translateX(0px) rotate(0deg)`,
-                                    opacity: 1
-                                },
-                                { 
-                                    transform: `translateY(100vh) translateX(${horizontalMovement}px) rotate(${Math.random() * 180}deg)`,
-                                    opacity: 0
-                                }
-                            ], {
-                                duration: animationDuration * 1000,
-                                easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
-                            });
+                        confetti.animate([
+                            { 
+                                transform: `translateY(0px) translateX(0px) rotate(0deg)`,
+                                opacity: 1
+                            },
+                            { 
+                                transform: `translateY(100vh) translateX(${horizontalMovement}px) rotate(${Math.random() * 180}deg)`,
+                                opacity: 0
+                            }
+                        ], {
+                            duration: animationDuration * 1000,
+                            easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
                         });
                         
                         // Rimuovi dopo l'animazione per liberare memoria
@@ -523,21 +449,21 @@
                             if (confetti.parentNode) {
                                 confetti.remove();
                             }
-                        }, animationDuration * 1000 + 100);
-                    }, i * 20); // Stagger le animazioni per performance
+                        }, animationDuration * 1000);
+                    }, i * 15); // Stagger le animazioni per ridurre lag
                 }
             }
             
-            // Effetto ripple ottimizzato (solo su desktop)
+            // Effetto ripple solo su desktop (non su mobile per performance)
             if (!isMobile) {
                 const buttons = document.querySelectorAll('.btn');
                 buttons.forEach(button => {
-                    button.addEventListener('click', function(e) {
+                    button.addEventListener('click', function(event) {
                         const ripple = document.createElement('span');
                         const rect = this.getBoundingClientRect();
                         const size = Math.max(rect.width, rect.height);
-                        const x = e.clientX - rect.left - size/2;
-                        const y = e.clientY - rect.top - size/2;
+                        const x = event.clientX - rect.left - size/2;
+                        const y = event.clientY - rect.top - size/2;
                         
                         ripple.style.cssText = `
                             position: absolute;
